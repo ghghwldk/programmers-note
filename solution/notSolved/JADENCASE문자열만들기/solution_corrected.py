@@ -13,6 +13,7 @@ def solution(s):
     for sp in splitted:
         result = None
         # consecutive space characters may appear.
+        # be cautious for the constraints of the problem given.
         if sp and existsNumber(sp):
             result = sp.lower()
             l.append(result)
