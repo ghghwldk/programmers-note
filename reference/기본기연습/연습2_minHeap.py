@@ -9,3 +9,5 @@ print(l)
 heappush(l, 1)
 print('after item pushed')
 print(l)
+
+# 원소 존재 확인
