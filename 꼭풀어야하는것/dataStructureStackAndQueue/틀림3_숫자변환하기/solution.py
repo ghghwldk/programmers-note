@@ -1,5 +1,8 @@
 '''
 visited로 시간초과 해결
+
+숫자 관련 bfs는 visited를 사용하지 않을 것이라고 생각했으나,
+visited를 사용하지 않으면, 시간초과가 발생하여 오답
 '''
 
 from collections import deque
