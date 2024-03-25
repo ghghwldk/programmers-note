@@ -26,3 +26,4 @@ def solution(sequence, k):
                 currentSum -= sequence[start]
                 start += 1
     return answer
+
