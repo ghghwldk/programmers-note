@@ -25,8 +25,10 @@ def makeResult(before):
     result = sorted(result)
     # print(result)
     return result
+
 from collections import defaultdict
 from itertools import combinations
+
 def solution(orders, courses):
     # get candidates
     candidates = defaultdict(list)
