@@ -2,16 +2,16 @@ from collections import Counter
 
 def solution(toppings):
     answer = 0
-    leftSet = set()
+    leftDict = dict()
     leftCount = 0
     rightCount = len(set(toppings))
     rightCounter = Counter(toppings)
 
     for topping in toppings:
         # leftCount 증감
-        if not topping in leftSet:
+        if not topping in leftDict:
             leftCount += 1
-            leftSet.add(topping)
+            leftDict[topping] = None
         # rightCount 차감
         rightCounter[topping] -= 1
         if rightCounter[topping] == 0:
