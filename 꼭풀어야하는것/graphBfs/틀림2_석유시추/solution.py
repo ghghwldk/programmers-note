@@ -1,52 +1,44 @@
-visited = None
-rCount, cCount = None, None
-dr = [1, -1, 0, 0]
-dc = [0, 0, 1, -1]
+from collections import deque
 
-from collections import deque, defaultdict
+visited = [[0 for _ in range(500)] for _ in range(500)]
+
+
+def bfs(y, x, n, m, land, answer_list):
+    queue = deque()
+    queue.append([y, x])
+    count = 1  # 면적 크기
+    dy = [1, -1, 0, 0]
+    dx = [0, 0, 1, -1]
+    visited[y][x] = 1
+    visited_x = [x]  # 면적과 만나는 열 번호
+    while queue:
+        cur_y, cur_x = queue.popleft()
+        for i in range(4):
+            ny = cur_y + dy[i]
+            nx = cur_x + dx[i]
+            if 0 <= ny < n and 0 <= nx < m:
+                if land[ny][nx] == 1 and visited[ny][nx] == 0:
+                    visited[ny][nx] = 1
+                    if nx not in visited_x:
+                        visited_x.append(nx)
+
+                    queue.append([ny, nx])
+                    count += 1
+
+    # 면적과 만나는 열 번호에 면적 크기를 더한다
+    for connected_x in visited_x:
+        answer_list[connected_x] += count
+
+
 def solution(land):
-    global visited, rCount, cCount
-    rCount, cCount = len(land), len(land[0])
-    visited = [[False] * cCount for i in range(rCount)]
-    surfaces = defaultdict(int)
+    n = len(land)
+    m = len(land[0])
+    answer_list = [0 for _ in range(m)]
 
-    nextIdx = 2 # 0, 1은 index가 될 수 없다.
-    for r in range(rCount):
-        for c in range(cCount):
-            q = deque()
-            q.append((r, c))
-            visited[r][c] = True
+    for i in range(n):
+        for j in range(m):
+            if land[i][j] == 1 and visited[i][j] == 0:
+                bfs(i, j, n, m, land, answer_list)
 
-            surface = 0
-            while q:
-                popped = q.popleft()
-                r, c = popped
-
-                for i in range(4):
-                    nr, nc = r + dr[i], c + dc[i]
-
-                    # print(nr, nc, r, c)
-                    if nr < 0 or nc< 0 or nr >= rCount or nc >= cCount:
-                        continue
-                    if not land[nr][nc] == 1:
-                        continue
-
-                    # 방문
-                    land[nr][nc] = nextIdx
-                    q.append((nr, nc))
-                    surface += 1
-            if surface > 0:
-                surfaces[nextIdx] = surface
-                nextIdx += 1
-
-    result = 0
-    for c in range(cCount):
-        visitedSet = set()
-        for r in range(rCount):
-            visitedSet.add(land[r][c])
-        # get surface
-        surface = 0
-        for idx in visitedSet:
-            surface += surfaces[idx]
-        result = max(result, surface)
-    return result
+    answer = max(answer_list)
+    return answer
