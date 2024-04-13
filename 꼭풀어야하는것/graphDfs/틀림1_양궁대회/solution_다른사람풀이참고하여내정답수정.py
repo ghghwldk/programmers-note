@@ -21,63 +21,48 @@
 # 이기기 위한 최소 개수 넣고 나서 가장 낮은 점수에 때려 넣으면 됨
 
 def compare(temp):
-    isWin, 점수 = False, 0
-
     라, 어 = 0, 0
     for i in range(11):
-        if temp[i] == 0 and 어피치[i] == 0:
-            continue
-        elif temp[i] > 어피치[i]:
-            라 += (10-i)
-        else:
-            어 += (10-i)
-    # print(라, 어, temp)
-    isWin = 라 > 어
-    점수 = 라
+        if temp[i] > 0 or 어피치[i] > 0:
+            if temp[i] > 어피치[i]:
+                라 += (10-i)
+            else:
+                어 += (10-i)
+    return (라 > 어, abs(라-어))
 
-    return isWin, 점수
-# visited 필요 없다. >> 낮은 점수로만 향하면 됨
 def dfs(step, 남은화살, temp):
     # print(어피치)
     # print(step, 남은화살, temp)
     global result, lastScore
-    if 남은화살 < 0:
-        return
     if 남은화살 == 0 or step == maxStep:
-        # 어피치점수와 비교해서 점수가 높은경우이만 진행
-        temp = convert(temp, 남은화살)
-        # print(getPoint(temp),temp)
-        print(temp)
-        isWin, 점수 = compare(temp)
+        converted = convert(temp, 남은화살)
+        isWin, 점수 = compare(converted)
         if isWin:
-
+            print(점수, lastScore, converted)
             if not result:
-                result, lastScore = temp, 점수
-            else:
-                비교해서result업데이트(temp, 점수)
+                result, lastScore = converted, 점수
+            if 점수 > lastScore: # 갭이 더 큰 경우로 업데이트
+                lastScore = 점수
+                result = converted
+            elif 점수 == lastScore: # 가장 낮은 점수를 많이 맞힌 경우로 업데이트
+                max_i_2, max_i_1 = 0, 0
+                for i in range(len(converted)):
+                    if result[i] > 0:
+                        max_i_1 = i
+                    if converted[i] > 0:
+                        max_i_2 = i
+                if max_i_2 > max_i_1:
+                    result = converted
         return
     # print('step:', step, '남은화살:', 남은화살, temp)
 
-    for next in range(step+1, 11):
+    if 남은화살 > 어피치[step]:
         temp.append((step, 어피치[step]+1))
-        dfs(next, 남은화살-(어피치[step]+1), temp)
+        dfs(step+1, 남은화살-(어피치[step]+1), temp)
         temp.pop()
-    return
+    dfs(step+1, 남은화살, temp)
 
-def 비교해서result업데이트(temp, 점수):
-    global lastScore, result
-    if lastScore > 점수:
-        return
-    elif lastScore < 점수:
-        lastScore = 점수
-        result = temp
-    else:
-        l1, l2 = result, temp
-        print(l1, l2)
-        for i in range(len(l1)-1, -1, -1):
-            if l1[i] > l2[i]:
-                result = l1
-                break
+
 def getPoint(l):
     point = 0
     for i, count in enumerate(l):
@@ -99,7 +84,7 @@ from sys import setrecursionlimit
 setrecursionlimit(int(1e9))
 def solution(n, info):
     global 어피치, maxStep, totalN
-    maxStep, 어피치 = len(info) - 1, info
+    maxStep, 어피치 = len(info), info
 
     totalN = n
     for i in range(len(어피치)):
@@ -107,8 +92,12 @@ def solution(n, info):
 
     return result if result else [-1]
 
+
 # solution(5, [2,1,1,1,0,0,0,0,0,0,0])
-print('result:',solution(10, [0,0,0,0,0,0,0,0,3,4,3]))
+# print('result:',solution(5, [2,1,1,1,0,0,0,0,0,0,0]))
+# print('result:',solution(9, [0, 0, 1, 2, 0, 1, 1, 1, 1, 1, 1]))
+# print('result:',solution(10, [0,0,0,0,0,0,0,0,3,4,3]))
+
 '''
 n	info	result
 5	[2,1,1,1,0,0,0,0,0,0,0]	[0,2,2,0,1,0,0,0,0,0,0]
