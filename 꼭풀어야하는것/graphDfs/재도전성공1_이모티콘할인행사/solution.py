@@ -22,6 +22,7 @@ def dfs(temp, level):
         return
 
     for next할인율 in 할인율s:
+        # 이렇게 하면, 첫번째 케이스를 포함한 경우와 포함하지 않은 경우를 모두 cases에 더할 수 있다.
         temp.append(next할인율)
         dfs(temp, level + 1)
         temp.pop()
