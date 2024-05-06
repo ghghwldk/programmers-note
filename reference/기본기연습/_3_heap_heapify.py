@@ -1,3 +1,9 @@
+'''
+heap으로 만들 때 시간복잡도는 nlog(n)
+push: log(n)
+pop: log(n)
+'''
+
 from heapq import heappush, heapify, heappop
 
 l = [1, 4, 3, 2]

@@ -1,3 +1,9 @@
+'''
+알고리즘 종류라기 보단 자료구조다.
+중복 제거, 최적화,
+완주하지 못한 선수
+'''
+
 from collections import defaultdict
 
 dd = defaultdict(int)
